@@ -1,0 +1,29 @@
+.monitor {
+    padding: 20px 0 25px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.monitor-left{
+    width: 378px;
+    text-align: center;
+}
+
+.device-info {
+    width: 378px;
+    height: 396px;
+    background: url(../../../../common/monitor-img/shebeixinxi_bg.png) no-repeat;
+}
+
+.map{
+    width: 378px;
+    height: 396px;
+}
+
+.monitor-right {
+    width: 1030px;
+    height: 800px;
+    background: url(../../../../common/monitor-img/zhengti_bg.png) no-repeat;
+    text-align: center;
+}
