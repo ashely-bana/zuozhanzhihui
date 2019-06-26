@@ -33,3 +33,7 @@ html {
     color: rgba(0, 252, 255, 1);
     text-decoration: none
 }
+
+.hide {
+    display: none !important;
+}
