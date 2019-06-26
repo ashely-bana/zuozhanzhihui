@@ -363,7 +363,7 @@ class componentName extends Component {
                                     })
                                 }
                         </ul>
-                        <div className="nearby"><span>临近视频</span><span>查看更多 >></span></div>
+                        <div className="nearby"><span>临近视频</span><span onClick={()=>this.props.history.push("/deploy/monitoringMore")}>查看更多 >></span></div>
                         <ul className="nearby-list">
                                 {
                                     nearbyList.map((item,index)=>{

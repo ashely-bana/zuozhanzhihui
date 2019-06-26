@@ -1,0 +1,54 @@
+.monitor-more {
+    width: 1800px;
+    margin: 0 auto;
+}
+
+.monitor-search {
+    padding: 20px 137px 10px;
+}
+
+.ant-calendar-picker, .ant-input-search, .ant-calendar-picker-input.ant-input, .ant-input-affix-wrapper .ant-input {
+    background: #226692;
+    color: #00FCFF;
+    border-color: #226692;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.ant-calendar-range-picker-separator, .ant-calendar-picker-icon, .ant-input-suffix, .ant-input-search-icon {
+    color: #00FCFF;
+}
+
+.more-content {
+    width: 1800px;
+    height: 715px;
+    background: url(../../../../common/monitor-img/jiankong_bg.png) no-repeat;
+    text-align: center;
+    margin: 10px auto 20px;
+}
+
+.video-list {
+    padding: 25px 30px;
+    height: 665px;
+}
+
+.video-list li{
+    width: 197px;
+    height: 106px;
+    background: url(../../../../common/monitor-img/shipin.png) no-repeat;
+    margin: 10px;
+    float: left;
+    cursor: pointer;
+}
+
+.anticon {
+    color: #00FCFF;
+}
+
+.ant-pagination-item a {
+    color: #00FCFF;
+}
+
+.ant-pagination-item.ant-pagination-item-active a{
+    color: #1890ff;
+}

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './index.css'; // css样式
 import Monitoring from './child/monitoring';  // 集中监控
+import MonitoringMore from './child/monitoring-more';  // 集中监控
 import Study from './child/study';  // 数据研判
 import Pigeonhole from './child/pigeonhole'; // 案件归档
 import Exchange from './child/exchange'; // 工作交流
@@ -81,6 +82,7 @@ class Deploy extends Component {
                 <Route path="/deploy/pigeonhole" component={Pigeonhole} />
                 <Route path="/deploy/exchange" component={Exchange} />
                 <Route path="/deploy/management" component={Management} />
+                <Route path="/deploy/monitoringMore" component={MonitoringMore} />
               </Switch>
             </main>
         </div>
