@@ -114,6 +114,8 @@ ul{
 .map{
     width: 378px;
     height: 396px;
+    margin-top: 8px;
+    border-radius: 10px;
 }
 
 .monitor-middle {
@@ -125,7 +127,9 @@ ul{
 .monitor-list li {
     width: 300px;
     height: 197px;
-    background: url(../../../../common/monitor-img/tankuang_bg.png) no-repeat
+    background: url(../../../../common/monitor-img/tankuang_bg.png) no-repeat;
+    margin-bottom: 4px;
+    cursor: pointer;
 }
 
 .monitor-list li video{
@@ -147,8 +151,62 @@ ul{
 }
 
 .content > video {
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     float: left;
+}
+
+.content .buttonDiv {
+    width: 500px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: 370px;
+    display: flex;
+    flex-direction: flex-start;
+    align-items: center;
+}
+
+.content .ant-slider.volumeSlider {
+    position: relative;
+    top: -50px;
+    left: -20px;
+    height: 60px;
+}
+
+.content .buttonDiv button{
+    margin-left: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.content .buttonDiv button#rew {
+    width: 24px;
+    height: 20px;
+    background: url(../../../../common/monitor-img/icon_kuaitui.png) no-repeat;
+}
+
+.content .buttonDiv button#play {
+    width: 16px;
+    height: 21px;
+    background: url(../../../../common/monitor-img/icon_bofang.png) no-repeat;
+}
+
+.content .buttonDiv button#play.zanting {
+    width: 15px;
+    height: 23px;
+    background: url(../../../../common/monitor-img/icon_zanting.png) no-repeat;
+}
+
+.content .buttonDiv button#fastFwd {
+    width: 24px;
+    height: 20px;
+    background: url(../../../../common/monitor-img/icon_kuaijin.png) no-repeat;
+}
+
+.content .buttonDiv button#volume {
+    width: 28px;
+    height: 22px;
+    background: url(../../../../common/monitor-img/shengyin_icon.png) no-repeat;
 }
 
 .content .video-right {
@@ -399,6 +457,12 @@ textarea {
 
 .nearby-list li video{
     display: inline-block;
+}
+
+.nearby-list li img{
+    float: left;
+    margin: 10px 0;
+    cursor: pointer;
 }
 
 .markList {
