@@ -115,13 +115,12 @@ ul{
     width: 378px;
     height: 396px;
     margin-top: 8px;
-    border-radius: 10px;
 }
 
 .monitor-middle {
     float: left;
     width: 300px;
-    margin-left: 18px;
+    margin-left: 38px;
 }
 
 .monitor-list li {
@@ -162,7 +161,7 @@ ul{
     left: 0;
     top: 370px;
     display: flex;
-    flex-direction: flex-start;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -222,7 +221,7 @@ ul{
     font-size: 12px;
     color: #00FCFF;
     border: none;
-    background: url(../../../../common/monitor-img/tijiao_bg.png) no-repeat;
+    background: url(../../../../common/monitor-img/tijiao_btn.png) no-repeat;
     position: absolute;
     right: 15px;
     bottom: 10px;
@@ -387,11 +386,12 @@ ul{
     padding: 30px 0
 }
 
-textarea {
+textarea.remark {
     width: 201px;
     height: 150px;
     background: url(../../../../common/monitor-img/beizhu_bg.png) no-repeat;
     text-indent: 10px;
+    color: #00FCFF;
 }
 
 .btn {
@@ -482,6 +482,7 @@ textarea {
 .markList li {
     font-size: 8px;
     text-align: left;
+    width: 100%;
 }
 
 .markList li.title{

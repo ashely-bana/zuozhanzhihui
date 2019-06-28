@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import './monitoring.css'; // css样式
-import { Tree, Slider } from 'antd'
+import { Tree, Slider, Input } from 'antd'
 const { TreeNode } = Tree;
+const { TextArea } = Input;
 const iconCameraUrl = require( '../../../../common/monitor-img/icon_shexiang.png')
 const iconShebeiUrl = require( '../../../../common/monitor-img/icon_shebei.png')
 const linjinPhoto = require( '../../../../common/monitor-img/shipin.png')
 const mainSrc = require('./rpi_car.MP4')
+const userName = '张宏'
 
 class componentName extends Component {
     constructor(props) {
@@ -19,6 +21,7 @@ class componentName extends Component {
             map: null,
             deviceList: [],
             btn: true,
+            remark: '',
             cameraNo: 'dzm-001-03',
             control: '1',
             luminosity: 100,
@@ -28,86 +31,86 @@ class componentName extends Component {
             frameRate: 100,
             definition: 100,
             commentList:  [{
-                id: 1,
+                time: 1,
                 commentTime: '2019-05-23 19:18:00',
                 commenter: '宋江',
                 comment: '此处很重要'
             },{
-                id: 2,
+                time: 2,
                 commentTime: '2019-05-23 18:18:00',
                 commenter: '宋江',
                 comment: '此处很重要'
             },{
-                id: 3,
+                time: 3,
                 commentTime: '2019-05-23 17:18:00',
                 commenter: '宋江',
                 comment: '此处很重要'
             }],
             nearbyList: [{
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             }, {
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 },{
-                    id: 2,
+                    time: 2,
                     commentTime: '2019-05-23 18:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 },{
-                    id: 3,
+                    time: 3,
                     commentTime: '2019-05-23 17:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             }, {
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 },{
-                    id: 2,
+                    time: 2,
                     commentTime: '2019-05-23 18:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 },{
-                    id: 3,
+                    time: 3,
                     commentTime: '2019-05-23 17:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             },{
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             },{
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             },{
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
                 }]
             },{
                 commentList: [{
-                    id: 1,
+                    time: 1,
                     commentTime: '2019-05-23 19:18:00',
                     commenter: '宋江',
                     comment: '此处很重要'
@@ -175,10 +178,7 @@ class componentName extends Component {
                                 "lat":116.53
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-0-0-0-1",
-                                "type": "camera",
-                                "lng":39.70,
-                                "lat":116.20
+                                "key":"0-0-0-0-0-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-0-0-0-2"
@@ -188,16 +188,10 @@ class componentName extends Component {
                             "key":"0-0-0-0-1",
                             "children":[{
                                 "title":"设备类型-编号01",
-                                "key":"0-0-0-0-1-0",
-                                "type": "shebei",
-                                "lng":39.80,
-                                "lat":116.30
+                                "key":"0-0-0-0-1-0"
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-0-0-1-1",
-                                "type": "shebei",
-                                "lng":39.70,
-                                "lat":116.20
+                                "key":"0-0-0-0-1-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-0-0-1-2"
@@ -215,16 +209,10 @@ class componentName extends Component {
                             "key":"0-0-1-0-0",
                             "children":[{
                                 "title":"设备类型-编号01",
-                                "key":"0-0-1-0-0-0",
-                                "type": "camera",
-                                "lng":39.60,
-                                "lat":116.10
+                                "key":"0-0-1-0-0-0"
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-1-0-0-1",
-                                "type": "camera",
-                                "lng":39.50,
-                                "lat":116.00
+                                "key":"0-0-1-0-0-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-1-0-0-2"
@@ -234,14 +222,10 @@ class componentName extends Component {
                             "key":"0-0-1-0-1",
                             "children":[{
                                 "title":"设备类型-编号01",
-                                "key":"0-0-1-0-1-0",
-                                "lng":36.40,
-                                "lat":113.40
+                                "key":"0-0-1-0-1-0"
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-1-0-1-1",
-                                "lng":35.90,
-                                "lat":112.90
+                                "key":"0-0-1-0-1-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-1-0-1-2"
@@ -255,14 +239,10 @@ class componentName extends Component {
                             "key":"0-0-1-0-0",
                             "children":[{
                                 "title":"设备类型-编号01",
-                                "key":"0-0-1-0-0-0",
-                                "lng":41.90,
-                                "lat":117.90
+                                "key":"0-0-1-0-0-0"
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-1-0-0-1",
-                                "lng":42.40,
-                                "lat":118.40
+                                "key":"0-0-1-0-0-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-1-0-0-2"
@@ -272,14 +252,10 @@ class componentName extends Component {
                             "key":"0-0-1-0-1",
                             "children":[{
                                 "title":"设备类型-编号01",
-                                "key":"0-0-1-0-1-0",
-                                "lng":42.90,
-                                "lat":118.90
+                                "key":"0-0-1-0-1-0"
                             },{
                                 "title":"设备类型-编号02",
-                                "key":"0-0-1-0-1-1",
-                                "lng":43.40,
-                                "lat":119.40
+                                "key":"0-0-1-0-1-1"
                             },{
                                 "title":"人员A",
                                 "key":"0-0-1-0-1-2"
@@ -304,11 +280,11 @@ class componentName extends Component {
         console.log(list)
         this.setState({
             map,
-            deviceList: list,
+            deviceList: [...list],
             volume
+        }, ()=>{
+            this.setMarker();
         })
-        this.setMarker();
-
     }
 
     findDevice = (data, deviceList) => {
@@ -416,15 +392,15 @@ class componentName extends Component {
         const { deviceList } = this.state;
         console.log(deviceList)
         const _this = this;
-        deviceList.slice(0,2).map(item=>{
+        deviceList.map(item=>{
             let marker, currRoom;
             const { map } = this.state;
             if(item.type === "camera"){
                 marker = window.BM.marker(window.BM.latLng(item.lng,item.lat),{icon:window.BM.icon({iconUrl:iconCameraUrl})}).addTo(map);
-            }else{
+            }else if(item.type === "shebei"){
                 marker = window.BM.marker(window.BM.latLng(item.lng,item.lat),{icon:window.BM.icon({iconUrl:iconShebeiUrl})}).addTo(map);
             }
-            marker.on("click", function(e){
+            marker && marker.on("click", function(e){
                 currRoom = window.StarRtc.Instance.getVoipRoomSDK("call", _this.voipCallBack, { "roomInfo": { "targetId": item.key } });
                 currRoom.sigConnect();
                 _this.setState({
@@ -436,23 +412,41 @@ class componentName extends Component {
     
     onSelect = (selectedKey, info) => {
         console.log('selected', selectedKey, info);
-        console.log(this)
         const list = [];
         this.findDevice(info.selectedNodes, list);
         this.setState({
-            deviceList: list
+            deviceList: [...list]
+        }, ()=>{
+            this.setMarker();
         })
-        this.setMarker();
     }
 
     handleVideoRef = (target) => {
         const { videoRef } = this.state;
         videoRef.push(target);
+        this.setState({
+            videoRef
+        })
     }
 
-    playVideo(index) {
-        // $("#mainVideo")[0].srcObject = this.state.videoRef[index].srcObject;
-        // this.refs.mainVideo.src = "https://github.com/starrtc/iot_car_demo/raw/master/rpi_car.MP4";
+    enlargeVideo = (index) => {
+        const { videoRef } = this.state;
+        this.setState({
+            videoSrc: '',
+            status: true
+        }, ()=>{
+            this.refs.mainVideo.srcObject = videoRef[index].srcObject;
+        })
+    }
+
+    playVideo = (item) => {
+        // const videoSrc = item.src;
+        const videoSrc = mainSrc;
+        this.setState({
+            videoSrc,
+            playVideo: true,
+            commentList: item.commentList
+        })
     }
 
     vidplay = () => {
@@ -492,9 +486,55 @@ class componentName extends Component {
         })
     }
 
+    
+    addMark() {
+        const video = this.refs.mainVideo;
+        const { commentList, remark } = this.state;
+        const obj = {};
+        var d = new Date();
+        var y = d.getFullYear();
+        var m = d.getMonth() + 1;
+        var ds = d.getDate();
+        if (ds <= 9) {
+            ds = '0' + ds;
+        }
+        var h = d.getHours();
+        if (h <= 9) {
+            h = '0' + h;
+        }
+        var f = d.getMinutes();
+        if (f <= 9) {
+            f = '0' + f;
+        }
+        var s = d.getSeconds();
+        if (s <= 9) {
+            s = '0' + s;
+        }
+        obj.commentTime = y + '-' + m + '-' + ds + ' ' + h + ':' + f  + ':' + s;
+        obj.commenter = userName;
+        obj.comment = remark;
+        obj.time = video.currentTime;
+        commentList.push(obj);
+        this.setState({
+            commentList,
+            remark: ''
+        })
+    }
+
+    gotoTime = (time) => {
+        const video = this.refs.mainVideo;
+        video.currentTime = time;
+    }
+
+    handleChange = (e) => {
+        this.setState({
+            remark: e.target.value
+        })
+    }
+
     render () {
         const { gData, btn, cameraNo, commentList, nearbyList, control, status, volume, volumeRange,
-            luminosity, transparency, tone, saturation, frameRate, definition } = this.state
+            luminosity, transparency, tone, saturation, frameRate, definition, videoSrc, remark } = this.state
 
         const loop = data =>
                 data.map(item => {
@@ -526,17 +566,17 @@ class componentName extends Component {
                 </div>
                 <div className="monitor-middle">
                     <ul className="monitor-list">
-                        <li onClick={this.playVideo.bind(this,1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
-                        <li onClick={this.playVideo.bind(this,1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
-                        <li onClick={this.playVideo.bind(this,1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
-                        <li onClick={this.playVideo.bind(this,1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
+                        <li onClick={this.enlargeVideo.bind(this, 1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
+                        <li onClick={this.enlargeVideo.bind(this, 2)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
+                        <li onClick={this.enlargeVideo.bind(this, 3)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
+                        <li onClick={this.enlargeVideo.bind(this, 4)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
                     </ul>
                 </div>
                 <div className={`btn ${ btn ? 'shouqi' : 'tankai' }`} onClick={this.expand.bind(this)}></div>
                 <div className={`monitor-right ${btn ? '': 'hide'}`} >
                     集中监控
                     <div className="content">
-                        <video id="mainVideo" width="704" height="400" ref="mainVideo" autoPlay src={mainSrc}></video>
+                        <video id="mainVideo" width="704" height="400" ref="mainVideo" src={videoSrc}></video>
                         <div className="buttonDiv">
                             <button id="rew" onClick={this.skip.bind(this,-10)}></button>
                             <button id="play" className={`${status?'zanting':''}`} onClick={this.vidplay.bind(this)}></button>
@@ -553,47 +593,47 @@ class componentName extends Component {
                                 <li className={`${control === '2' ? 'active' : ''}`} onClick={this.changeControl.bind(this,'2')}>视频控制</li>
                             </ul>
                             <div className={`video-content ${control === '1' ? '' : 'hide'}`}>
-                                        <div className="yuntai-left">
-                                            <div className="shang"></div>
-                                            <div className="you"></div>
-                                            <div className="xia"></div>
-                                            <div className="zuo"></div>
-                                            <div className="zhong"></div>
-                                        </div>
-                                        <div className="yuntai-right">
-                                            <p><span>缩放</span><span className="anniu"><i className="jia"></i></span><span className="anniu"><i className="jian"></i></span></p>
-                                            <p><span>光圈</span><span className="anniu">大</span><span className="anniu">小</span></p>
-                                            <p><span>聚焦</span><span className="anniu">近</span><span className="anniu">远</span></p>
-                                            <p><span>速度</span><Slider defaultValue={30} disabled={false} /></p>
-                                        </div>
-                                        <div className="yuntai-left-bottom">
-                                            <p><span>扫描</span><span className="anniu">启</span><span className="anniu">停</span></p>
-                                            <p><span>红外</span><span className="anniu">启</span><span className="anniu">停</span></p>
-                                        </div>
-                                        <div className="yuntai-right-bottom">
-                                            <p><span>巡航</span><span className="anniu">启</span><span className="anniu">停</span></p>
-                                            <p><span>雨刷</span><span className="anniu">启</span><span className="anniu">停</span></p>
-                                        </div>
-                                    </div>
-                                    <div className={`video-content  ${control === '2' ? '' : 'hide'} attribute`}>
-                                        <p>光度：{luminosity}</p>
-                                        <p>透明度：{transparency}</p>
-                                        <p>色调：{tone}</p>
-                                        <p>饱和度：{saturation}</p>
-                                        <p>帧率：{frameRate}</p>
-                                        <p>清晰度：{definition}</p>
-                                    </div>
-                            <textarea className="remark" cols="30" rows="10" placeholder="请输入备注信息："></textarea>
-                            <button>提交</button>
+                                <div className="yuntai-left">
+                                    <div className="shang"></div>
+                                    <div className="you"></div>
+                                    <div className="xia"></div>
+                                    <div className="zuo"></div>
+                                    <div className="zhong"></div>
+                                </div>
+                                <div className="yuntai-right">
+                                    <p><span>缩放</span><span className="anniu"><i className="jia"></i></span><span className="anniu"><i className="jian"></i></span></p>
+                                    <p><span>光圈</span><span className="anniu">大</span><span className="anniu">小</span></p>
+                                    <p><span>聚焦</span><span className="anniu">近</span><span className="anniu">远</span></p>
+                                    <p><span>速度</span><Slider defaultValue={30} disabled={false} /></p>
+                                </div>
+                                <div className="yuntai-left-bottom">
+                                    <p><span>扫描</span><span className="anniu">启</span><span className="anniu">停</span></p>
+                                    <p><span>红外</span><span className="anniu">启</span><span className="anniu">停</span></p>
+                                </div>
+                                <div className="yuntai-right-bottom">
+                                    <p><span>巡航</span><span className="anniu">启</span><span className="anniu">停</span></p>
+                                    <p><span>雨刷</span><span className="anniu">启</span><span className="anniu">停</span></p>
+                                </div>
+                            </div>
+                            <div className={`video-content  ${control === '2' ? '' : 'hide'} attribute`}>
+                                <p>光度：{luminosity}</p>
+                                <p>透明度：{transparency}</p>
+                                <p>色调：{tone}</p>
+                                <p>饱和度：{saturation}</p>
+                                <p>帧率：{frameRate}</p>
+                                <p>清晰度：{definition}</p>
+                            </div>
+                            <TextArea className="remark" placeholder="请输入备注信息：" onChange={this.handleChange} value={remark}/>
+                            <button onClick={this.addMark.bind(this)}>提交</button>
                         </div>
                         <ul className="brilliant-moment">
-                                {
-                                    commentList.map(item=>{
-                                        return (
-                                            <li>{item.commentTime} {item.commenter}标注了“{item.comment}”</li>
-                                        )
-                                    })
-                                }
+                            {
+                                commentList.map(item=>{
+                                    return (
+                                        <li onClick={this.gotoTime.bind(this,item.time)}>{item.commentTime} {item.commenter}标注了“{item.comment}”</li>
+                                    )
+                                })
+                            }
                         </ul>
                         <div className="nearby"><span>临近视频</span><span onClick={()=>this.props.history.push("/deploy/monitoringMore")}>查看更多 >></span></div>
                         <ul className="nearby-list">
@@ -608,7 +648,7 @@ class componentName extends Component {
                                                         <source src='' type="video/mp4" />
                                                         您的浏览器不支持 HTML5 video 标签。
                                                     </video> */}
-                                                    <img src={linjinPhoto} width="79" height="60" onClick={this.playVideo} />
+                                                    <img src={linjinPhoto} width="79" height="60" onClick={this.playVideo.bind(this,item)} />
                                                     <ul className={`markList ${(index+1)%3 ? '' : 'mr0'}`}>
                                                             <li className="title">标注：</li>
                                                             {
