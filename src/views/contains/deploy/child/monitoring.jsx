@@ -312,23 +312,31 @@ class componentName extends Component {
 
     stopVoip = () => {
         const { videoRef } = this.state;
-        videoRef.map(item=>{
-            item.srcObject = null;
-            item.load();
-        })
-        this.setState({
-            currRoom: null
-        })
+        console.log(videoRef)
+        // let index;
+        // for(let i = 0; i< videoRef.length; i++){
+        //     if(!videoRef[i]){
+        //         index = i - 1;
+        //         break;
+        //     }
+        // }
+        // videoRef[index].srcObject = null;
+        // videoRef[index].load();
+        // this.setState({
+        //     currRoom: null
+        // })
     }
 
     voipSetStream = (streamObj) => {
         const { videoRef } = this.state;
-        videoRef.map(item=>{
-            if(!item.srcObject){
-                item.srcObject = streamObj;
-                item.play();
+        for(let i = 0; i< videoRef.length; i++){
+            if(!videoRef[i].srcObject){
+                videoRef[i].srcObject = streamObj;
+                videoRef[i].play();
+                break;
             }
-        })
+        }
+        console.log(videoRef)
     }
 
     voipCallBack = (data, status, oper) => {
@@ -431,11 +439,12 @@ class componentName extends Component {
 
     enlargeVideo = (index) => {
         const { videoRef } = this.state;
+        
+        this.refs.mainVideo.removeAttribute("src");
+        this.refs.mainVideo.srcObject = videoRef[index].srcObject;
+        this.refs.mainVideo.play();
         this.setState({
-            videoSrc: '',
-            status: false
-        }, ()=>{
-            this.refs.mainVideo.srcObject = videoRef[index].srcObject;
+            status: true
         })
     }
 
@@ -566,10 +575,10 @@ class componentName extends Component {
                 </div>
                 <div className="monitor-middle">
                     <ul className="monitor-list">
+                        <li onClick={this.enlargeVideo.bind(this, 0)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
                         <li onClick={this.enlargeVideo.bind(this, 1)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
                         <li onClick={this.enlargeVideo.bind(this, 2)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
                         <li onClick={this.enlargeVideo.bind(this, 3)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
-                        <li onClick={this.enlargeVideo.bind(this, 4)}><video width="260" height="160" ref={this.handleVideoRef}></video></li>
                     </ul>
                 </div>
                 <div className={`btn ${ btn ? 'shouqi' : 'tankai' }`} onClick={this.expand.bind(this)}></div>
