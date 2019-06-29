@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './monitoring.css'; // css样式
 import { Tree, Slider, Input } from 'antd'
+import $ from 'jquery'
 const { TreeNode } = Tree;
 const { TextArea } = Input;
 const iconCameraUrl = require( '../../../../common/monitor-img/icon_shexiang.png')
@@ -8,12 +9,15 @@ const iconShebeiUrl = require( '../../../../common/monitor-img/icon_shebei.png')
 const linjinPhoto = require( '../../../../common/monitor-img/shipin.png')
 const mainSrc = require('./rpi_car.MP4')
 const userName = '张宏'
+const agentId = "stargWeHN8Y7"
 
 class componentName extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            // videoMeetingMsgWindow: new MyMsgWindow("videoMeetingMsgWindow", this.videoLiveInputMsgCallBack),
             currRoom: null,
+            selectVideoMeetingIndex: -1,
             videoRef: [],
             status: false,
             volume: 100,
@@ -268,6 +272,13 @@ class componentName extends Component {
         }
     }
 
+    videoLiveInputMsgCallBack = (msg)=> {
+        const { currRoom } = this.state;
+        if (currRoom != null) {
+            currRoom.sendChatMsg(msg);
+        }
+    }
+
     componentDidMount() {
         window.BM.Config.HTTP_URL = 'http://www.bigemap.com:9000';
         // 在ID为map的元素中实例化一个地图，并设置地图的ID号为 bigemap.googlemap-streets，ID号程序自动生成，无需手动配置，并设置地图的投影为百度地图 ，中心点，默认的级别和显示级别控件
@@ -339,60 +350,169 @@ class componentName extends Component {
         console.log(videoRef)
     }
 
-    voipCallBack = (data, status, oper) => {
+    videoMeetingCallBack = (data, status, oper) => {
         var thisRoom = data.obj;
-        switch (status){
+        switch (status) {
+            //链接状态
             case "connect success":
-                //连接成功
-                thisRoom.createStream();
+                switch (oper) {
+                    case "open":
+                        thisRoom.createStream();
+                        break;
+                    case "new":
+                        thisRoom.createNew();
+                        break;
+                }
                 break;
             case "connect failed":
             case "connect closed":
-                this.stopVoip();
-                //连接失败
-            break;
+                this.stopVideoMeeting();
+                break;
+            case "onChatRoomMessage":
+                switch (data.type) {
+                    case "joinChatRoom":
+                        if (data.status == "success") { }
+                        else {
+                            alert(data.failedStatus);
+                        }
+                        break;
+                    case "recvChatPrivateMsg":
+                        // this.state.videoMeetingMsgWindow.displayMessage(data.msg.fromId + "私信", data.msg.contentData, false);
+                        alert(data.msg.fromId + "私信: " + data.msg.contentData);
+                        break;
+                    case "recvChatMsg":
+                        // this.state.videoMeetingMsgWindow.displayMessage(data.msg.fromId, data.msg.contentData, false);
+                        alert(data.msg.fromId + ": " + data.msg.contentData);
+                        break;
+                    case "chatroomUserKicked":
+                        thisRoom.leavideoMeetingMsgWindowveRoom();
+                        alert("你已被踢出房间！");
+                        break;
+                    case "serverErr":
+                        alert("服务器错误：" + data.msg);
+                        break;
+                }
+                break;
             case "onWebrtcMessage":
-                //视频接口消息
-                switch(data.type)
-                {
+                switch (data.type) {
                     case "streamCreated":
-                        //本地视频流创建，data.status == "success"为成功
-                        if (data.status === "success") {
-                            this.voipSetStream(data.streamObj);
-                            thisRoom.joinRoom();
+                        if (data.status == "success") {
+                            this.videoMeetingSetStream(data.streamObj);
+                            switch (oper) {
+                                case "open":
+                                    thisRoom.joinRoom();
+                                    break;
+                                case "new":
+                                    thisRoom.joinRoom();
+                                    break;
+                            }
                         }
                         else {
-                            // voipConnectDlg.dialog("close");
                             alert("获取摄像头视频失败！请检查摄像头设备是否接入！error:" + data.error);
                         }
                         break;
-                    case "voipStreamReady":
-                        //远端视频流准备，data.status == "success"为成功
-                        //可以使用data.streamObj对象
-					    this.voipSetStream(data.streamObj);
+                    case "srcApplyUpload":
+                        if (data.status == "success") {
+                            // this.joinMeetingRoom(data.userData.roomInfo);
+                        }
+                        else {
+                            alert("上传申请失败");
+                            console.log("收到_webrtc_apply_failed");
+                        }
+                        break;
+                    case "addUploader":
+                        var newVideoId = "webrtc_video_" + data.upUserId;
+                        var streamInfo = data.streamInfo;
+                        streamInfo.videoId = newVideoId;
+                        this.videoMeetingAddNewVideo(newVideoId, streamInfo.streamObj, function (evt) {
+                            thisRoom.streamConfigChange(data.upId);
+                        });
+                        break;
+                    case "removeUploader":
+                        var streamInfo = data.streamInfo;
+                        var newVideoId = streamInfo.videoId;
+                        this.removeNewVideo($("#" + newVideoId));
+                        if (data.bigFlag) {
+                            var videos = $(".monitor-list video");
+                            if (videos.length > 0) {
+                                videos[videos.length - 1].click();
+                            }
+                        }
+                        break;
+                    case "delChannel":
+                        if (data.status == "success") {
+                            //load gData;
+                        }
+                        else {
+                            alert("删除视频会议失败");
+                        }
+                        break;
+                    case "createChannel":
+                        if (data.status == "success") {
+                            if (window.StarRtc.Instance.configModePulic) {
+                                $.get(window.StarRtc.Instance.workServerUrl + "/meeting/store?appid=" + agentId + "&ID=" + data.userData.roomInfo.ID + "&Name=" + data.userData.roomInfo.Name + "&Creator=" + data.userData.roomInfo.Creator);
+                            }
+                            else {
+                                window.StarRtc.Instance.reportVideoMeetingRoom(data.userData.roomInfo, function (status) {
+                                    console.log("创建" + status);
+                                });
+                            }
+                            var index = -1;
+                            const { deviceList } = this.state;
+                            let { selectVideoMeetingIndex } = this.state;
+                            for (var i in deviceList) {
+                                // if (deviceList[i].ID == data.userData.roomInfo.ID) {
+                                if (deviceList[i].key == data.userData.roomInfo.key) {
+                                    index = i;
+                                }
+                            }
+                            if (index >= 0) {
+                                selectVideoMeetingIndex = index;
+                            }
+                            else {
+                                selectVideoMeetingIndex = undefined;
+                            }
+                            this.setState({
+                                selectVideoMeetingIndex
+                            });
+                            thisRoom.createStream();                            
+                        }
+                        else {
+                            alert("创建失败:" + data.msg);
+                        }
+                        break;
+                    case "serverErr":
+                        alert("服务器错误：" + data.msg);
                         break;
                 }
                 break;
-            case "onVoipMessage":
-                switch(data.type)
-                {
-                    case "voipRefuse":
-                    //对方拒绝了通话
-                    break;
-                    case "voipHangup":
-                    //对方挂断了通话
-                    break;
-                    case "voipConnect":
-                    //voip接通
-                    break;
-                    case "voipBusy":
-                    //对方正忙
-                    break;
-                    case "voipSingleMsg":
-                    //收到voip消息
-                    break;
-                }
-                break;
+        }
+    }
+
+    videoMeetingSetStream = (object) => {
+        const { videoRef } = this.state;
+        videoRef[0].srcObject = object;
+        videoRef[0].play();
+    }
+
+    videoMeetingAddNewVideo = (newVideoId, stream, clickCallback) => {
+        var parentObj = $(".monitor-list");
+        var wrapperObj = $("<li onClick={this.enlargeVideo.bind(this, 1)}></li>");
+        var videoObj = $("<video id=\"" + newVideoId + "\" width=\"260\" height=\"160\" ref={this.handleVideoRef}></video>");
+
+        videoObj.bind("click", clickCallback);
+    
+        wrapperObj.append(videoObj);
+    
+        parentObj.append(wrapperObj);
+    
+        videoObj[0].srcObject = stream;
+        videoObj[0].play();
+    }
+
+    removeNewVideo = (parentObj, videoObject) => {
+        if (videoObject != undefined) {
+            videoObject.parent().remove();
         }
     }
 
@@ -400,8 +520,8 @@ class componentName extends Component {
         const { deviceList } = this.state;
         console.log(deviceList)
         const _this = this;
-        deviceList.map(item=>{
-            let marker, currRoom;
+        deviceList.map((item,index)=>{
+            let marker, { currRoom, selectVideoMeetingIndex } = this.state;
             const { map } = this.state;
             if(item.type === "camera"){
                 marker = window.BM.marker(window.BM.latLng(item.lng,item.lat),{icon:window.BM.icon({iconUrl:iconCameraUrl})}).addTo(map);
@@ -409,10 +529,18 @@ class componentName extends Component {
                 marker = window.BM.marker(window.BM.latLng(item.lng,item.lat),{icon:window.BM.icon({iconUrl:iconShebeiUrl})}).addTo(map);
             }
             marker && marker.on("click", function(e){
-                currRoom = window.StarRtc.Instance.getVoipRoomSDK("call", _this.voipCallBack, { "roomInfo": { "targetId": item.key } });
+                if(selectVideoMeetingIndex === index) return
+                if (currRoom != null) {
+                    currRoom.leaveRoom();
+                    currRoom.sigDisconnect();
+                    currRoom = null;
+                }
+                selectVideoMeetingIndex = index;
+                currRoom = window.StarRtc.Instance.getVideoMeetingRoomSDK("open", _this.videoMeetingCallBack, { "roomInfo": item })
                 currRoom.sigConnect();
                 _this.setState({
-                    currRoom: currRoom
+                    currRoom: currRoom,
+                    selectVideoMeetingIndex
                 });
             })
         })
