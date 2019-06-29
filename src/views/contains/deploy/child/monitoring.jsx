@@ -313,18 +313,18 @@ class componentName extends Component {
     stopVoip = () => {
         const { videoRef } = this.state;
         console.log(videoRef)
-        // let index;
-        // for(let i = 0; i< videoRef.length; i++){
-        //     if(!videoRef[i]){
-        //         index = i - 1;
-        //         break;
-        //     }
-        // }
-        // videoRef[index].srcObject = null;
-        // videoRef[index].load();
-        // this.setState({
-        //     currRoom: null
-        // })
+        let index;
+        for(let i = 0; i< videoRef.length; i++){
+            if(!videoRef[i]){
+                index = i - 1;
+                break;
+            }
+        }
+        videoRef[index].srcObject = null;
+        videoRef[index].load();
+        this.setState({
+            currRoom: null
+        })
     }
 
     voipSetStream = (streamObj) => {
