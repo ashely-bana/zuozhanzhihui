@@ -433,7 +433,7 @@ class componentName extends Component {
         const { videoRef } = this.state;
         this.setState({
             videoSrc: '',
-            status: true
+            status: false
         }, ()=>{
             this.refs.mainVideo.srcObject = videoRef[index].srcObject;
         })
@@ -444,7 +444,7 @@ class componentName extends Component {
         const videoSrc = mainSrc;
         this.setState({
             videoSrc,
-            playVideo: true,
+            status: false,
             commentList: item.commentList
         })
     }
