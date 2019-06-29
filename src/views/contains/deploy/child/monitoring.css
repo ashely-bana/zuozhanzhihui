@@ -4,6 +4,10 @@
     position: relative;
 }
 
+.hide {
+    display: none !important;
+}
+
 ul{
     margin-bottom: 0;
 }
