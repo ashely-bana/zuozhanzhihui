@@ -3,6 +3,7 @@ import './monitoring.css'; // css样式
 import axios from 'axios'
 import { Tree, Slider, Input } from 'antd'
 import $ from 'jquery'
+import { async } from 'q';
 const { TreeNode } = Tree;
 const { TextArea } = Input;
 const iconCameraUrl = require( '../../../../common/monitor-img/icon_shexiang.png')
@@ -289,14 +290,23 @@ class componentName extends Component {
         const _this = this;
         axios.get('http://39.98.37.28:8085/command/combat/getAllCaseList').then((response)=>{
             treeData = treeData.concat(response.data);
-            treeData.map(async (item) => {
-                let children = await axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
+            treeData.map(item => {
+                axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
                     params: {
                         caseId: item.id
                     }
+                }).then((rsp)=>{
+                    item.caseList = rsp.data
                 })
-                item.caseList = children.data
-            })
+            });
+            // treeData.map(async item=>{
+            //     let caseList = await axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
+            //         params: {
+            //             caseId: item.id
+            //         }
+            //     })
+            //     item.caseList = caseList;
+            // })
             console.log(treeData)
             const list = [];
             _this.findDevice(treeData, list);
@@ -315,11 +325,19 @@ class componentName extends Component {
     }
 
     findDevice = (data, deviceList) => {
-        data.map(item=>{
-            if(item.caseList || item.teamList || item.deviceList){
-                this.findDevice(item.caseList || item.teamList || item.deviceList, deviceList)
-            }else{
-                deviceList.push(item)
+        data.map( item => {
+            if(item.caseList){
+                item.caseList.map(caseI => {
+                    if(caseI.teamList) {
+                        caseI.teamList.map(team => {
+                            if(team.deviceList){
+                                team.deviceList.map(device=>{
+                                    deviceList.push(device)
+                                })
+                            }
+                        })
+                    }
+                })
             }
         })
     }
