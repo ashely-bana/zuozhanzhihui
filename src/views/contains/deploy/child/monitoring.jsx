@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './monitoring.css'; // css样式
 import { Tree, Slider } from 'antd'
+import axios from 'axios'
 const { TreeNode } = Tree;
 const iconCameraUrl = require( '../../../../common/monitor-img/icon_shexiang.png')
 const iconShebeiUrl = require( '../../../../common/monitor-img/icon_shebei.png')
@@ -297,13 +298,27 @@ class componentName extends Component {
         // 在ID为map的元素中实例化一个地图，并设置地图的ID号为 bigemap.googlemap-streets，ID号程序自动生成，无需手动配置，并设置地图的投影为百度地图 ，中心点，默认的级别和显示级别控件
         var map = window.BM.map('map', 'bigemap.googlemap-satellite', { center: [39.9023974684,116.4056851466], zoom: 10, zoomControl: true });
         const { gData } = this.state;
+        let treeData = []
+        axios.get('http://39.98.37.28:8085/command/combat/getAllCaseList').then((response)=>{
+            treeData = treeData.concat(response.data);
+            treeData.map(item=>{
+                axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
+                    params: {
+                        caseId: item.id
+                    }
+                }).then((missionResponse)=>{
+                    item.children = missionResponse.data
+                })
+            })
+        })
         const list = [];
-        this.findDevice(gData, list);
+        this.findDevice(treeData, list);
         var video = this.refs.mainVideo;
         const volume = video.volume * 100;
         console.log(list)
         this.setState({
             map,
+            gData: treeData,
             deviceList: list,
             volume
         })

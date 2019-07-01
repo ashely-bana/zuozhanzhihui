@@ -116,12 +116,13 @@ ul{
     height: 396px;
     margin-top: 8px;
     border-radius: 10px;
+    /* border: 1px solid #0096FF; */
 }
 
 .monitor-middle {
     float: left;
     width: 300px;
-    margin-left: 18px;
+    margin-left: 38px;
 }
 
 .monitor-list li {
