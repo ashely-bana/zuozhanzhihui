@@ -515,12 +515,12 @@ class componentName extends Component {
                 data.map(item => {
                     if (item.children && item.children.length) {
                         return (
-                        <TreeNode key={item.key} title={item.title}>
+                        <TreeNode key={item.id} title={item.name || item.means}>
                             {loop(item.children)}
                         </TreeNode>
                         );
                     }
-                    return <TreeNode key={item.key} title={item.title} />;
+                    return <TreeNode key={item.id} title={item.name || item.means} />;
                 });
         return (
             <div className="monitor">
