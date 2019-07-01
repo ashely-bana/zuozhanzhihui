@@ -284,39 +284,40 @@ class componentName extends Component {
         window.BM.Config.HTTP_URL = 'http://www.bigemap.com:9000';
         // 在ID为map的元素中实例化一个地图，并设置地图的ID号为 bigemap.googlemap-streets，ID号程序自动生成，无需手动配置，并设置地图的投影为百度地图 ，中心点，默认的级别和显示级别控件
         var map = window.BM.map('map', 'bigemap.googlemap-satellite', { center: [39.9023974684,116.4056851466], zoom: 10, zoomControl: true });
-        const { gData } = this.state;
-        let treeData = []
+        // const { gData } = this.state;
+        let treeData = [];
+        const _this = this;
         axios.get('http://39.98.37.28:8085/command/combat/getAllCaseList').then((response)=>{
             treeData = treeData.concat(response.data);
-            treeData.map(item=>{
-                axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
+            treeData.map(async (item) => {
+                let children = await axios.get('http://39.98.37.28:8085/command/combat/getMissionListByCaseId', {
                     params: {
                         caseId: item.id
                     }
-                }).then((missionResponse)=>{
-                    item.children = missionResponse.data
                 })
+                item.caseList = children.data
             })
-        })
-        const list = [];
-        this.findDevice(treeData, list);
-        var video = this.refs.mainVideo;
-        const volume = video.volume * 100;
-        console.log(list)
-        this.setState({
-            map,
-            gData: treeData,
-            deviceList: list,
-            volume
-        }, ()=>{
-            this.setMarker();
+            console.log(treeData)
+            const list = [];
+            _this.findDevice(treeData, list);
+            var video = _this.refs.mainVideo;
+            const volume = video.volume * 100;
+            console.log(list)
+            _this.setState({
+                map,
+                gData: treeData,
+                deviceList: list,
+                volume
+            }, ()=>{
+                _this.setMarker();
+            })
         })
     }
 
     findDevice = (data, deviceList) => {
         data.map(item=>{
-            if(item.children){
-                this.findDevice(item.children, deviceList)
+            if(item.caseList || item.teamList || item.deviceList){
+                this.findDevice(item.caseList || item.teamList || item.deviceList, deviceList)
             }else{
                 deviceList.push(item)
             }
@@ -386,7 +387,7 @@ class componentName extends Component {
             case "onChatRoomMessage":
                 switch (data.type) {
                     case "joinChatRoom":
-                        if (data.status == "success") { }
+                        if (data.status === "success") { }
                         else {
                             alert(data.failedStatus);
                         }
@@ -411,7 +412,7 @@ class componentName extends Component {
             case "onWebrtcMessage":
                 switch (data.type) {
                     case "streamCreated":
-                        if (data.status == "success") {
+                        if (data.status === "success") {
                             this.videoMeetingSetStream(data.streamObj);
                             switch (oper) {
                                 case "open":
@@ -427,7 +428,7 @@ class componentName extends Component {
                         }
                         break;
                     case "srcApplyUpload":
-                        if (data.status == "success") {
+                        if (data.status === "success") {
                             // this.joinMeetingRoom(data.userData.roomInfo);
                         }
                         else {
@@ -455,7 +456,7 @@ class componentName extends Component {
                         }
                         break;
                     case "delChannel":
-                        if (data.status == "success") {
+                        if (data.status === "success") {
                             //load gData;
                         }
                         else {
@@ -463,7 +464,7 @@ class componentName extends Component {
                         }
                         break;
                     case "createChannel":
-                        if (data.status == "success") {
+                        if (data.status === "success") {
                             if (window.StarRtc.Instance.configModePulic) {
                                 $.get(window.StarRtc.Instance.workServerUrl + "/meeting/store?appid=" + agentId + "&ID=" + data.userData.roomInfo.ID + "&Name=" + data.userData.roomInfo.Name + "&Creator=" + data.userData.roomInfo.Creator);
                             }
@@ -476,8 +477,8 @@ class componentName extends Component {
                             const { deviceList } = this.state;
                             let { selectVideoMeetingIndex } = this.state;
                             for (var i in deviceList) {
-                                // if (deviceList[i].ID == data.userData.roomInfo.ID) {
-                                if (deviceList[i].key == data.userData.roomInfo.key) {
+                                // if (deviceList[i].ID === data.userData.roomInfo.ID) {
+                                if (deviceList[i].key === data.userData.roomInfo.key) {
                                     index = i;
                                 }
                             }
@@ -690,14 +691,14 @@ class componentName extends Component {
 
         const loop = data =>
                 data.map(item => {
-                    if (item.children && item.children.length) {
+                    if ((item.caseList && item.caseList.length) || (item.teamList && item.teamList.length) ||(item.deviceList && item.deviceList.length)) {
                         return (
-                        <TreeNode key={item.id} title={item.name || item.means}>
-                            {loop(item.children)}
+                        <TreeNode key={item.id} title={item.name}>
+                            {loop(item.caseList || item.teamList || item.deviceList)}
                         </TreeNode>
                         );
                     }
-                    return <TreeNode key={item.id} title={item.name || item.means} />;
+                    return <TreeNode key={item.id} title={item.name} />;
                 });
         return (
             <div className="monitor">
