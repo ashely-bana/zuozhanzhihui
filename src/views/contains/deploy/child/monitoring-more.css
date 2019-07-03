@@ -55,7 +55,7 @@
 .video-list li{
     width: 197px;
     height: 106px;
-    background: url(../../../../common/monitor-img/shipin.png) no-repeat;
+    /* background: url(../../../../common/monitor-img/shipin.png) no-repeat; */
     margin: 10px;
     float: left;
     cursor: pointer;

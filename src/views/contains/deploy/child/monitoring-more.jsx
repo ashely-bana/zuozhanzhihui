@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './monitoring-more.css'; // css样式
+import axios from 'axios'
 import { Pagination, DatePicker, Input, Slider, Select } from 'antd'
 const { RangePicker } = DatePicker;
 const { Search, TextArea } = Input;
@@ -11,14 +12,19 @@ class componentName extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            videoList: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
-                {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
+            videoList: [],
             playVideo: false,
             status: false,
             volume: 100,
             volumeRange: false,
+            total: 0,
+            pageSize: 40,
+            pageNumber: 1,
+            startTime: '',
+            endTime: '',
+            devId: '',
             time: '',
-            case: '',
+            caseName: '',
             caseList: [],
             videoSrc: '',
             remark: '',
@@ -34,11 +40,15 @@ class componentName extends Component {
 
     onChange(date, dateString) {
         console.log(date, dateString);
+        this.setState({
+            startTime: dateString[0].replace(/-/g, '/'),
+            endTime: dateString[1].replace(/-/g, '/')
+        })
     }
 
     playVideo = (item) => {
-        // const videoSrc = item.src;
-        const videoSrc = mainSrc;
+        const videoSrc = item.videoUrl;
+        // const videoSrc = mainSrc;
         this.setState({
             videoSrc,
             playVideo: true
@@ -144,21 +154,54 @@ class componentName extends Component {
         })
     }
 
+    onSearch = (value) =>{
+        this.setState({
+            devId: value
+        }, ()=>{
+            this.getData()
+        })
+    }
+
+    getData () {
+        const { startTime, endTime, devId, pageSize, pageNumber } = this.state;
+        const sTime = encodeURIComponent(startTime);
+        const eTime = encodeURIComponent(endTime);
+        console.log(sTime,eTime)
+        const _this = this;
+        axios.get('http://39.98.37.28:8085/command/combat/getVideoHistoryListByDevIdAndTime?devId=' + devId + 
+            '&startTime=' + startTime + '&endTime=' + endTime + '&pageSize=' + pageSize + '&pageNumber=' + pageNumber).then((response)=>{
+            const total = (pageNumber - 1) * pageSize + response.data.length
+            _this.setState({
+                videoList: response.data,
+                total
+            })
+        })
+    }
+
+    onPageChange = (page, pageSize) => {
+        this.setState({
+            pageNumber: page
+        }, ()=>{
+            this.getData()
+        })
+    }
+
     render () {
         const { videoList, playVideo, volume, volumeRange, videoMarkList, status, 
-            videoSrc, remark, caseList } = this.state
+            videoSrc, remark, caseList, total, pageSize, pageNumber } = this.state
 
         return (
             <div className="monitor-more">
                 <div className="monitor-search">
                     <RangePicker 
-                        format="YYYY-MM-DD HH:mm"
+                        format="YYYY-MM-DD HH:mm:ss"
                         placeholder={['请输入开始时间', '请输入结束时间']}
-                        onChange={this.onChange.bind(this)} 
+                        onChange={this.onChange.bind(this)}
                     />
                     <Search
-                        placeholder="请输入设备名称等信息进行查询"
-                        onSearch={value => console.log(value)}
+                        placeholder="请输入设备编号进行查询"
+                        onSearch={this.onSearch}
+                        // onSearch={value=>console.log(value)}
                         style={{ width: 250 }}
                     />
                     <Select placeholder="请选择时间段" className="custom-select" onChange={this.handleSelectChange.bind(this,'time')}>
@@ -166,7 +209,7 @@ class componentName extends Component {
                         <Option value="最近一周">最近一周</Option>
                         <Option value="最近一个月">最近一个月</Option>
                     </Select>
-                    <Select placeholder="请选择案件" className="custom-select" onChange={this.handleSelectChange.bind(this,'case')}>
+                    <Select placeholder="请选择案件" className="custom-select" onChange={this.handleSelectChange.bind(this,'caseName')}>
                         {
                             caseList.map(item=>{
                                 return (
@@ -182,12 +225,20 @@ class componentName extends Component {
                         {
                             videoList.map(item=>{
                                 return (
-                                    <li onClick={this.playVideo.bind(this,item)}></li>
+                                    <li onClick={this.playVideo.bind(this,item)}>
+                                        <img src={item.photoUrl} width="100%" height="100%"/>
+                                    </li>
                                 )
                             })
                         }
                     </ul>
-                    <Pagination size="small" total={100} />
+                    <Pagination 
+                        size="small"
+                        total={total}
+                        pageSize={pageSize}
+                        current={pageNumber} 
+                        // showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    />
                 </div>
                 <div className={`dialog ${playVideo ? '' : 'hide'} `}>
                     <div className="close" onClick={this.closeDialog.bind(this)}>x</div>
